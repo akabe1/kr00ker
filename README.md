@@ -14,6 +14,10 @@ More specifically this script attempts to retrieve Plaintext Data of WPA2 CCMP p
  * WPA2 AES-CCMP decryption --> AES(Nonce,TK) XOR Encrypted Data = Decrypted Data  
  * Decrypted stream starts with "\xaa\xaa\x03\x00\x00\x00"
  * Nonce (104 bits) = Priority (1byte) + SRC MAC (6bytes) + PN (6bytes)
+ 
+# Preconditions:
+This PoC works on WPA2 AES CCMP with Frequency 2.4GHz WLANs.
+NOTE: tested only using my wireless adapter TPLINK TL-WN722N, but I think it should work also with other wireless adapters.
 
 
 # References:
@@ -21,7 +25,7 @@ More specifically this script attempts to retrieve Plaintext Data of WPA2 CCMP p
 
 
 # Limitations
-To check the Kr00k vulnerability it coulb be necessary to launch the PoC multiple times, because (it seems that) not always
+To check the Kr00k vulnerability could be necessary to launch the PoC multiple times, because (it seems that) not always
 a sufficient amount of data is buffered on vulnerable devices (hint: try using streaming apps).
 
 # Notes
