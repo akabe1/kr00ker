@@ -4,7 +4,7 @@ kr00ker
 
 # Description 
 This script is a simple experiment to exploit the KR00K vulnerability (CVE-2019-15126), 
-that allows to decrypt some WPA2 CCMP data in vulnerable devices.
+that allows to decrypt some WPA2 CCMP data in vulnerable devices (Access Point or Clients).
 More specifically this script attempts to retrieve Plaintext Data of WPA2 CCMP packets knowning:
  * the TK (128 bites all zero) 
  * the Nonce (sent plaintext in packet header)
