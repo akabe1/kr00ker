@@ -1,4 +1,4 @@
-# Kr00ker
+# kr00ker
 #
 # Experimetal KR00K PoC in python3 using scapy
 #
@@ -155,7 +155,7 @@ def main():
     parser.add_argument("-b", "--bssid", required=True, help="The MAC address of the Access Point to test", type=str)
     parser.add_argument("-c", "--client", required=True, help="The MAC address of the Client Device to test", type=str)
     parser.add_argument("-n", "--number", required=False, help="The Number of disassociation packets you want to send", type=int, default=1)
-    parser.add_argument("-r", "--reason", required=False, help="The Reason identifier of disassociation packets you want to send, accepted values from 1 to 99", type=int, default=0)
+    parser.add_argument("-r", "--reason", required=False, help="The Reason identifier of disassociation packets you want to send, accepted values from 1 to 99", type=int, default=7)
     parser.add_argument("-t", "--target", required=False, help="The Target identifier", choices=["ap", "client"], type=str, default="ap")
     parser.add_argument("-w", "--wifi_channel", required=False, help="The WiFi channel identifier", type=int, default="1")
     parser.add_argument("-d", "--delay", required=False, help="The delay for disassociation frames", type=int, default="4")
@@ -189,6 +189,11 @@ def main():
         # Check if a valid reason have been specified
         if reason not in range(1,99):
             print("Exiting, specified a not valid disassociation Reason ID: "+str(reason))
+            exit(1)
+         
+        # Check if a valid delay have been specified
+        if delay <= 0:
+            print("Exiting, the specified delay is not valid")
             exit(1)
 
         # Set the MAC address of the target
