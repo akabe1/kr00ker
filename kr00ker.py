@@ -150,7 +150,7 @@ class Krooker:
 
 def main():
     # Passing arguments
-    parser = argparse.ArgumentParser(prog="kr00ker.py", usage="%(prog)s -i <interface-name> -s <SSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t <target-id> -w <wifi-channel> -d <delay>")
+    parser = argparse.ArgumentParser(prog="kr00ker.py", usage="%(prog)s -i <interface-name> -b <BSSID> -c <MAC-client> -n <num-packets> -r <reason-id> -t <target-id> -w <wifi-channel> -d <delay>")
     parser.add_argument("-i", "--interface", required=True, help="The Interface name that you want to send packets out of, it must be set in monitor mode", type=str)
     parser.add_argument("-b", "--bssid", required=True, help="The MAC address of the Access Point to test", type=str)
     parser.add_argument("-c", "--client", required=True, help="The MAC address of the Client Device to test", type=str)
