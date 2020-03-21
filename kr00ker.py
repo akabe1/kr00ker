@@ -154,11 +154,11 @@ def main():
     parser.add_argument("-i", "--interface", required=True, help="The Interface name that you want to send packets out of, it must be set in monitor mode", type=str)
     parser.add_argument("-b", "--bssid", required=True, help="The MAC address of the Access Point to test", type=str)
     parser.add_argument("-c", "--client", required=True, help="The MAC address of the Client Device to test", type=str)
-    parser.add_argument("-n", "--number", required=False, help="The Number of disassociation packets you want to send", type=int, default=1)
-    parser.add_argument("-r", "--reason", required=False, help="The Reason identifier of disassociation packets you want to send, accepted values from 1 to 99", type=int, default=7)
-    parser.add_argument("-t", "--target", required=False, help="The Target identifier", choices=["ap", "client"], type=str, default="ap")
-    parser.add_argument("-w", "--wifi_channel", required=False, help="The WiFi channel identifier", type=int, default="1")
-    parser.add_argument("-d", "--delay", required=False, help="The delay for disassociation frames", type=int, default="4")
+    parser.add_argument("-n", "--number", required=False, help="The Number of disassociation packets you want to send (default 1)", type=int, default=1)
+    parser.add_argument("-r", "--reason", required=False, help="The Reason identifier of disassociation packets you want to send (default 7)", type=int, default=7)
+    parser.add_argument("-t", "--target", required=False, help="The Target identifier (default ap)", choices=["ap", "client"], type=str, default="ap")
+    parser.add_argument("-w", "--wifi_channel", required=False, help="The WiFi channel identifier (default 1)", type=int, default="1")
+    parser.add_argument("-d", "--delay", required=False, help="The delay for disassociation frames (default 4 seconds)", type=int, default="4")
     args = parser.parse_args()
     
     # Print the kr00ker logo
@@ -188,7 +188,7 @@ def main():
     
         # Check if a valid reason have been specified
         if reason not in range(1,99):
-            print("Exiting, specified a not valid disassociation Reason ID: "+str(reason))
+            print("Exiting, specified a not valid disassociation Reason ID: "+str(reason)+", accepted values from 1 to 99")
             exit(1)
          
         # Check if a valid delay have been specified
@@ -197,7 +197,7 @@ def main():
             exit(1)
 
         # Set the MAC address of the target
-        if args.target == "client":
+        if args.target.lower() == "client":
             target_mac = client_mac
             other_mac = ap_mac
             print("["+str(datetime.now().time())+"][+] The Client device "+target_mac+" will be the target")
