@@ -59,6 +59,11 @@ $ sudo python3 kr00ker.py -i wlan0mon -b XX:XX:XX:XX:XX:XX -c ZZ:ZZ:ZZ:ZZ:ZZ:ZZ 
 
 When the Kr00k vulnerability is triggered on target device the hexdump of decrypted data is shown in output, and also this data is saved on a pcap file.
 
+Following an example of output for a KR00K vulnerable device:
+
+![kr00ker_output](photo_kr00ker.png)
+
+
 
 # Author
 kr00ker was developed by Maurizio Siddu
