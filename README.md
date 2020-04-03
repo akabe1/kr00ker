@@ -16,7 +16,7 @@ More specifically this script attempts to retrieve decrypted data of WPA2 CCMP p
  * Nonce (104 bits) = Priority (1byte) + SRC MAC (6bytes) + PN (6bytes)
  
 # Preconditions:
-This PoC works on WPA2 AES CCMP with Frequency 2.4GHz WLANs. (NOTE: tested only using my wireless adapter TPLINK TL-WN722N, but I think it should work also with other wireless adapters able to iject packets).
+This PoC works on WPA2 AES CCMP with Frequency 2.4GHz WLANs. (NOTE: tested only using my wireless adapter TPLINK TL-WN722N, but I think it should work also with other wireless adapters able to inject packets).
 
 
 # References:
@@ -38,7 +38,7 @@ The script is compatible with Python 3.
 
 
 # Usage
-Following are reported some usage examples of the tool. You must insert MAC addresses of AP and Client, also is importan to set the correct WiFi Channel of the WPA2 CCMP WLAN and to specify the target identifier. 
+Following are reported some usage examples of the tool. You must insert MAC addresses of AP and Client, also is important to set the correct WiFi Channel of the WPA2 CCMP WLAN and to specify the target identifier. 
 Use the "--help" option for a more exhaustive list.
 
 ```
